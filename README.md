@@ -15,6 +15,14 @@ It is based on Radsi2's CustomHats mod: https://thunderstore.io/c/peak/p/Radsi2/
 - Buzzball by Bombzyz ( https://x.com/Bombzyz )
 - Don't Hug Me I'm Scared plushies by Bombzyz ( https://x.com/Bombzyz )
 - Extra head
+- Lyn Mametchi ( https://bsky.app/profile/mametchi.bsky.social )
+- Curry_paws ( https://bsky.app/profile/currypaws.bsky.social )
+- Charborg plush
+- MonAmiral hair (that me)
+- Deme Nishki hair
+- Auteru Tori chirpling
+- Pocket Waifu hats & glasses ( https://store.steampowered.com/app/2989820/Pocket_Waifu_Desktop_Pet/ )
+- Pocket Waifu hair
 - More to come!
 
 # Instructions

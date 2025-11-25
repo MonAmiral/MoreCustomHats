@@ -34,7 +34,7 @@ namespace MoreCustomHats
 				hatOption.requiredAchievement = ACHIEVEMENTTYPE.NONE;
 				customization.hats = customization.hats.AddToArray(hatOption);
 
-				Debug.Log($"[MonAmiral] {name} added.");
+				Debug.Log($"[MonAmiral] PassportManager[{customization.hats.Length - 1}] = {name}");
 
 				return true;
 			}
@@ -45,7 +45,20 @@ namespace MoreCustomHats
 			{
 				Customization customization = __instance.GetComponent<Customization>();
 
-				Debug.Log($"[MonAmiral] Adding hat CustomizationOptions.");
+				Debug.Log($"[MonAmiral] Adding PassportManager CustomizationOptions.");
+
+				Texture2D dummyIcon = assetBundle.LoadAsset<Texture2D>($"Assets/Passport_Dummy.png");
+				for (int i = 0; i < customization.fits.Length; i++)
+				{
+					if (customization.fits[i].overrideHat)
+					{
+						while (customization.hats.Length - 1 < customization.fits[i].overrideHatIndex)
+						{
+							CreateHatOption(customization, $"Dummy#{customization.hats.Length}", dummyIcon);
+						}
+					}
+				}
+
 				for (int i = 0; i < hats.Count; i++)
 				{
 					HatEntry hat = hats[i];
@@ -59,7 +72,8 @@ namespace MoreCustomHats
 			[HarmonyPostfix]
 			public static void CharacterCustomizationAwakePostfix(CharacterCustomization __instance)
 			{
-				Transform hatsContainer = __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(1).GetChild(1);
+				Transform hatsContainer = __instance.refs.transform.Find(@"Armature/Hip/Mid/AimJoint/Torso/Head/Hat");
+				List<Renderer> renderers = new List<Renderer>(__instance.refs.playerHats);
 
 				Debug.Log($"[MonAmiral] Instanciating CharacterCustomization hats as children of {__instance} / {hatsContainer}.");
 				for (int i = 0; i < hats.Count; i++)
@@ -77,10 +91,12 @@ namespace MoreCustomHats
 						renderer.materials[j].shader = Shader.Find("W/Character");
 					}
 
-					Debug.Log($"[MonAmiral] CharacterCustomization Hats[{__instance.refs.playerHats.Length}] = {hat.Name}");
-					__instance.refs.playerHats = __instance.refs.playerHats.AddToArray(renderer);
+					Debug.Log($"[MonAmiral] CharacterCustomization Hats[{renderers.Count}] = {hat.Name}");
 					__instance.refs.AllRenderers = __instance.refs.AllRenderers.AddToArray(renderer);
+					renderers.Add(renderer);
 				}
+
+				__instance.refs.playerHats = renderers.ToArray();
 			}
 
 			private static PlayerCustomizationDummy lastModifiedDummy;
@@ -96,7 +112,8 @@ namespace MoreCustomHats
 
 				lastModifiedDummy = __instance;
 
-				Transform hatsContainer = __instance.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(2).GetChild(0).GetChild(0).GetChild(1).GetChild(1);
+				Transform hatsContainer = __instance.refs.transform.Find(@"Armature/Hip/Mid/AimJoint/Torso/Head/Hat");
+				List<Renderer> renderers = new List<Renderer>(__instance.refs.playerHats);
 
 				Debug.Log($"[MonAmiral] Instanciating PlayerCustomizationDummy hats as children of {__instance} / {hatsContainer}.");
 				for (int i = 0; i < hats.Count; i++)
@@ -115,8 +132,10 @@ namespace MoreCustomHats
 					}
 
 					Debug.Log($"[MonAmiral] PlayerCustomizationDummy Hats[{__instance.refs.playerHats.Length}] = {hat.Name}");
-					__instance.refs.playerHats = __instance.refs.playerHats.AddToArray(renderer);
+					renderers.Add(renderer);
 				}
+
+				__instance.refs.playerHats = renderers.ToArray();
 			}
 
 			[HarmonyPatch(typeof(CharacterCustomization), "OnPlayerDataChange")]
@@ -234,6 +253,13 @@ namespace MoreCustomHats
 			hats.Add(LoadHat("PocketWaifu/HatPolice"));
 			hats.Add(LoadHat("PocketWaifu/HatPombeanie"));
 			hats.Add(LoadHat("PocketWaifu/HatSummerHat"));
+			hats.Add(LoadHat("PocketWaifuHair/HairBuns"));
+			hats.Add(LoadHat("PocketWaifuHair/HairDressBuns"));
+			hats.Add(LoadHat("PocketWaifuHair/HairLong"));
+			hats.Add(LoadHat("PocketWaifuHair/HairPonytail"));
+			hats.Add(LoadHat("PocketWaifuHair/HairRacer"));
+			hats.Add(LoadHat("PocketWaifuHair/HairShort"));
+			hats.Add(LoadHat("PocketWaifuHair/HairTwinTails"));
 
 			Debug.Log($"[MonAmiral] Done!");
 		}
